@@ -204,7 +204,9 @@ public class SysUserServiceImpl implements SysUserService {
         if (!user.getPassword().equals(PasswordUtil.encrypt(userPwd.getPassword(), user.getUsername()))) {
             throw new ZhydException("原密码不正确！");
         }
-        user.setPassword(userPwd.getNewPassword());
+        
+        // Fix: Encrypt the new password before storing it
+        user.setPassword(PasswordUtil.encrypt(userPwd.getNewPassword(), user.getUsername()));
 
         return this.updateSelective(user);
     }
